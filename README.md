@@ -1,2 +1,5 @@
 # roc-plugin-style-css
-Adds support for CSS for Roc - With support for CSS Modules and server includes
+[![Build Status](https://travis-ci.org/rocjs/roc-plugin-style-css.svg?branch=master)](https://travis-ci.org/rocjs/roc-plugin-style-css)
+
+__Plugin providing CSS support for Webpack__  
+- [roc-plugin-style-css](/packages/roc-plugin-style-css)
