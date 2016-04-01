@@ -1,4 +1,4 @@
-import { getSettings, getAbsolutePath } from 'roc';
+import { getAbsolutePath } from 'roc';
 import autoprefixer from 'autoprefixer';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
@@ -12,15 +12,14 @@ export default ({ settings, previousValue: rocBuilder }) => (target) => () => {
         info
     } = rocBuilder;
 
-    const buildSettings = getSettings('build');
-    const DEV = buildSettings.mode === 'dev';
-    const DIST = buildSettings.mode === 'dist';
+    const DEV = settings.build.mode === 'dev';
+    const DIST = settings.build.mode === 'dist';
     const WEB = target === 'web';
     const NODE = target === 'node';
 
     const getGlobalStylePaths = (toMatch) => {
-        if (WEB && settings.assets) {
-            return settings.assets.map((path) => {
+        if (WEB && settings.build.assets) {
+            return settings.build.assets.map((path) => {
                 if (toMatch.test(path)) {
                     return getAbsolutePath(path);
                 }
