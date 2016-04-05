@@ -18,8 +18,8 @@ export default ({ settings, previousValue: rocBuilder }) => (target) => () => {
     const NODE = target === 'node';
 
     const getGlobalStylePaths = (toMatch) => {
-        if (WEB && settings.build.assets) {
-            return settings.build.assets.map((path) => {
+        if (WEB && settings.build.resources) {
+            return settings.build.resources.map((path) => {
                 if (toMatch.test(path)) {
                     return getAbsolutePath(path);
                 }
