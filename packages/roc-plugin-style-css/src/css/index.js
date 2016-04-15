@@ -36,8 +36,8 @@ export default ({ settings, previousValue: rocBuilder }) => (target) => () => {
         currentExtensions = currentExtensions.concat(extensions);
         currentLoaders = currentLoaders.concat(loaders);
     });
-    const toMatch = new RegExp(currentExtensions.map((extension) => `\\.${extension}$`).join('|'));
 
+    const toMatch = new RegExp(currentExtensions.map((extension) => `\\.${extension}$`).join('|'));
     const globalStylePaths = getGlobalStylePaths(toMatch);
 
     // Create general style loader
@@ -66,7 +66,7 @@ export default ({ settings, previousValue: rocBuilder }) => (target) => () => {
                 }
             },
             loader: ExtractTextPlugin.extract(require.resolve('style-loader'),
-                cssPipeline('css-loader', currentLoaders, settings, DIST))
+                cssPipeline('css-loader', currentLoaders, settings, DIST, false))
         });
     }
 
