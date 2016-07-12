@@ -2,16 +2,12 @@ import { getAbsolutePath } from 'roc';
 import autoprefixer from 'autoprefixer';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-import cssPipeline from './pipeline';
 import { invokeHook } from '../roc/util';
 
-export default ({ settings, previousValue: rocBuilder }) => (target) => () => {
-    let {
-        buildConfig,
-        builder,
-        info
-    } = rocBuilder;
+import cssPipeline from './pipeline';
 
+export default ({ config: { settings }, previousValue: webpackConfig }) => (target) => () => {
+    const newWebpackConfig = { ...webpackConfig };
     const DEV = settings.build.mode === 'dev';
     const DIST = settings.build.mode === 'dist';
     const WEB = target === 'web';
@@ -23,6 +19,8 @@ export default ({ settings, previousValue: rocBuilder }) => (target) => () => {
                 if (toMatch.test(path)) {
                     return getAbsolutePath(path);
                 }
+
+                return undefined;
             }).filter((path) => path !== undefined);
         }
 
@@ -46,51 +44,51 @@ export default ({ settings, previousValue: rocBuilder }) => (target) => () => {
         'css-loader';
     const styleLoader = cssPipeline(loader, currentLoaders, settings, DIST);
 
-    buildConfig.module.loaders.push({
+    newWebpackConfig.module.loaders.push({
         test: (absPath) => {
             if (globalStylePaths.indexOf(absPath) === -1 && toMatch.test(absPath)) {
                 return true;
             }
+
+            return false;
         },
         loader: WEB ?
             ExtractTextPlugin.extract(require.resolve('style-loader'), styleLoader) :
-            styleLoader
+            styleLoader,
     });
 
     // Create global style loader
     if (WEB) {
-        buildConfig.module.loaders.push({
+        newWebpackConfig.module.loaders.push({
             test: (absPath) => {
                 if (globalStylePaths.indexOf(absPath) !== -1) {
                     return true;
                 }
+
+                return false;
             },
             loader: ExtractTextPlugin.extract(require.resolve('style-loader'),
-                cssPipeline('css-loader', currentLoaders, settings, DIST, false))
+                cssPipeline('css-loader', currentLoaders, settings, DIST, false)),
         });
     }
 
     // Update resolve extensions
-    buildConfig.resolve = {
-        ...buildConfig.resolve,
-        extensions: buildConfig.resolve.extensions.concat(currentExtensions.map((extension) => `.${extension}`))
+    newWebpackConfig.resolve = {
+        ...newWebpackConfig.resolve,
+        extensions: newWebpackConfig.resolve.extensions.concat(currentExtensions.map((extension) => `.${extension}`)),
     };
 
     // Configure autoprefixer
-    buildConfig.postcss = [
-        autoprefixer(settings.build.style.autoprefixer[0])
+    newWebpackConfig.postcss = [
+        autoprefixer(settings.build.style.autoprefixer),
     ];
 
     // Configure ExtractTextPlugin
-    buildConfig.plugins.push(
+    newWebpackConfig.plugins.push(
         new ExtractTextPlugin(settings.build.style.name, {
-            disable: WEB && DEV
+            disable: WEB && DEV,
         })
     );
 
-    return {
-        buildConfig,
-        builder,
-        info
-    };
+    return newWebpackConfig;
 };
