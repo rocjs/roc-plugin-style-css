@@ -16,6 +16,6 @@ export default function cssPipeline(base, loaders, settings, isDist, cssModulesE
         '';
 
     // We set importLoaders to nr. loaders + 1 to get css-loader to process everything through the pipeline
-    return `${require.resolve(base)}?sourceMap?importLoaders=${loaders.length + 1}${moduleSettings}` +
+    return `${require.resolve(base)}?-autoprefixer&sourceMap?importLoaders=${loaders.length + 1}${moduleSettings}` +
         `!${require.resolve('postcss-loader')}${extraLoaders}`;
 }
