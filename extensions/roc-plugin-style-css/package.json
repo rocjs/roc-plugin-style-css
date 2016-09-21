@@ -28,7 +28,7 @@
     "css-loader": "~0.23.0",
     "extract-text-webpack-plugin": "~0.8.2",
     "postcss-loader": "~0.8.0",
-    "roc": "^1.0.0-rc",
+    "roc": "1.0.0-rc.11",
     "style-loader": "~0.13.0",
     "webpack": "~1.12.2"
   },
