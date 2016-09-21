@@ -6,7 +6,7 @@ import { invokeHook } from '../roc/util';
 
 import cssPipeline from './pipeline';
 
-export default ({ config: { settings }, previousValue: webpackConfig }) => (target) => () => {
+export default ({ context: { config: { settings } }, previousValue: webpackConfig }) => (target) => () => {
     const newWebpackConfig = { ...webpackConfig };
     const DEV = settings.build.mode === 'dev';
     const DIST = settings.build.mode === 'dist';
