@@ -90,5 +90,8 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
         })
     );
 
+    // We want to be able to use the css-loader in projects without the user needing to install them directly.
+    newWebpackConfig.resolveLoader.root.push(join(__dirname, '../../node_modules'));
+
     return newWebpackConfig;
 };
