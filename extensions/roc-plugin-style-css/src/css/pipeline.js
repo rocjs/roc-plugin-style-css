@@ -1,7 +1,7 @@
-export default function cssPipeline(base, loaders, settings, isDist, cssModulesEnabled = true) {
+export default function cssPipeline(base, loaders, isDist, cssModulesEnabled = true) {
     let moduleSettings = '';
-    if (settings.build.style.modules && cssModulesEnabled) {
-        moduleSettings = '&module&localIdentName=';
+    if (cssModulesEnabled) {
+        moduleSettings = '&modules&localIdentName=';
 
         // Define how the class names should be defined
         if (isDist) {
