@@ -2,14 +2,17 @@
 
 ## Build
 
+
 ### Style
+
 | Name     | Description                                          | Path                              | CLI option                          | Default               | Type      | Required | Can be empty | Extensions           |
 | -------- | ---------------------------------------------------- | --------------------------------- | ----------------------------------- | --------------------- | --------- | -------- | ------------ | -------------------- |
-| modules  | If CSS Modules should be enabled.                    | build.style.modules               | --build-style-modules               | `true`                | `Boolean` | Yes      | Yes          | roc-plugin-style-css |
+| modules  | If CSS Modules should be enabled.                    | build.style.modules               | --build-style-modules               | `true`                | `Boolean` | Yes      |              | roc-plugin-style-css |
 | name     | The naming pattern to use for the built style files. | build.style.name                  | --build-style-name                  | `"[name].[hash].css"` | `String`  | Yes      | No           | roc-plugin-style-css |
 
 #### Autoprefixer
-✓ ― Supports `__raw`
+
+✓ ― Supports __raw
 
 | Name     | Description                                          | Path                              | CLI option                          | Default               | Type      | Required | Can be empty | Extensions           |
 | -------- | ---------------------------------------------------- | --------------------------------- | ----------------------------------- | --------------------- | --------- | -------- | ------------ | -------------------- |

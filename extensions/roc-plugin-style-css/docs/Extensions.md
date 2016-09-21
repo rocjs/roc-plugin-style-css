@@ -1,7 +1,9 @@
 # Extensions for `roc-plugin-style-css`
 
-The extensions that are used in the project, indirect and direct.
+The extensions that are used in the project, indirect and direct, in the order that they were added.
+
 ## Packages
-No packages.
+_No packages._
+
 ## Plugins
 _No plugins._
