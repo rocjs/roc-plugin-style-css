@@ -101,7 +101,7 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
             if (toMatch.test(request)) {
                 return callback(null, false);
             }
-            callback();
+            return callback();
         });
 
         if (settings.build.style.modules) {
