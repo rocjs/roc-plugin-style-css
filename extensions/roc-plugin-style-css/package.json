@@ -1,0 +1,46 @@
+{
+  "name": "roc-plugin-style-css",
+  "version": "1.0.0-beta.0",
+  "description": "Plugin providing CSS support for Webpack in Roc",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "npm run lint"
+  },
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "roc",
+    "roc-plugin",
+    "webpack",
+    "style",
+    "css"
+  ],
+  "repository": "https://github.com/rocjs/roc-plugin-style-css/tree/master/extensions/roc-plugin-style-css",
+  "author": "Verdens Gang AS",
+  "contributors": [{
+    "name": "Gustaf Dalemar"
+  }],
+  "license": "MIT",
+  "dependencies": {
+    "autoprefixer": "~6.1.2",
+    "css-loader": "~0.23.0",
+    "extract-text-webpack-plugin": "~0.8.2",
+    "postcss-loader": "~0.8.0",
+    "roc": "1.0.0-rc.11",
+    "style-loader": "~0.13.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "~6.1.2",
+    "eslint": "~3.0.1",
+    "eslint-config-airbnb-base": "~4.0.0",
+    "eslint-plugin-babel": "~3.3.0",
+    "eslint-plugin-import": "~1.10.2"
+  },
+  "roc": {
+    "packages": [
+      "./lib/index.js"
+    ]
+  }
+}

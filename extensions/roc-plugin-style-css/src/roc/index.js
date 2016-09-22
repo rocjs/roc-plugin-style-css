@@ -1,26 +1,19 @@
-import {
-    isObject,
-    isArrayOrSingle,
-    isString
-} from 'roc/validators';
+import { isArray, isObject, isString, oneOf } from 'roc/validators';
+import { lazyFunctionRequire } from 'roc';
 
 import config from '../config/roc.config.js';
 import meta from '../config/roc.config.meta.js';
-import css from '../css';
 
-import { name } from './util';
+const lazyRequire = lazyFunctionRequire(require);
 
 export default {
-    name,
     config,
     meta,
-    actions: {
-        css: {
-            hook: 'build-webpack',
-            description: 'Adds CSS support.',
-            action: () => css
-        }
-    },
+    actions: [{
+        hook: 'build-webpack',
+        description: 'Adds CSS support.',
+        action: lazyRequire('../css'),
+    }],
     hooks: {
         'add-style': {
             description: `
@@ -30,7 +23,7 @@ export default {
 
             \`{ extensions: String/[String], loaders: String/[String] }\``,
             hasCallback: true,
-            returns: isObject(isArrayOrSingle(isString))
-        }
-    }
+            returns: isObject(oneOf(isString, isArray(isString))),
+        },
+    },
 };
