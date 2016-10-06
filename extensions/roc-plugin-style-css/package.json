@@ -1,6 +1,6 @@
 {
   "name": "roc-plugin-style-css",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "Plugin providing CSS support for Webpack in Roc",
   "main": "lib/index.js",
   "scripts": {
