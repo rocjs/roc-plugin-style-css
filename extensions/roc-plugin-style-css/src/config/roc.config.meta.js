@@ -1,4 +1,4 @@
-import { isBoolean, isString, notEmpty, required } from 'roc/validators';
+import { isBoolean, isString, isArray, oneOf, notEmpty, required } from 'roc/validators';
 
 export default {
     settings: {
@@ -9,7 +9,7 @@ export default {
                     description: 'Settings for Autoprefixer.',
                     browsers: {
                         description: 'What browsers that should be supported.',
-                        validator: notEmpty(isString),
+                        validator: oneOf(notEmpty(isString), isArray(notEmpty(isString))),
                     },
                 },
                 name: {
