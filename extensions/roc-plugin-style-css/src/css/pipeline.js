@@ -1,6 +1,8 @@
 export default function cssPipeline(base, loaders, isDist, sourceMap = false, cssModulesEnabled = true) {
     let moduleSettings = '';
-    let sourceMapSettings = '';
+    const sourceMapSettings = sourceMap ?
+        'sourceMap&' :
+        '';
 
     if (cssModulesEnabled) {
         moduleSettings = '&modules&localIdentName=';
@@ -12,9 +14,6 @@ export default function cssPipeline(base, loaders, isDist, sourceMap = false, cs
             moduleSettings += '[path]_[name]__[local]___[hash:base64:5]';
         }
     }
-    if (sourceMap) {
-        sourceMapSettings = 'sourceMap';
-    }
 
     const extraLoaders = loaders.length > 0 ?
         `!${loaders.join('!')}` :
@@ -22,7 +21,7 @@ export default function cssPipeline(base, loaders, isDist, sourceMap = false, cs
 
     // We set importLoaders to nr. loaders + 1 to get css-loader to process everything through the pipeline
     return `${require.resolve(base)}?` +
-        `${sourceMapSettings}&` +
+        `${sourceMapSettings}` +
         '-autoprefixer&' +
         `importLoaders=${loaders.length + 1}` +
         `${moduleSettings}` +
