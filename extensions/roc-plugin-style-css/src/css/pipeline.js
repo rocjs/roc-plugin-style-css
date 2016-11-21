@@ -1,5 +1,9 @@
-export default function cssPipeline(base, loaders, isDist, cssModulesEnabled = true) {
+export default function cssPipeline(base, loaders, isDist, sourceMap = false, cssModulesEnabled = true) {
     let moduleSettings = '';
+    const sourceMapSettings = sourceMap ?
+        'sourceMap&' :
+        '';
+
     if (cssModulesEnabled) {
         moduleSettings = '&modules&localIdentName=';
 
@@ -16,6 +20,11 @@ export default function cssPipeline(base, loaders, isDist, cssModulesEnabled = t
         '';
 
     // We set importLoaders to nr. loaders + 1 to get css-loader to process everything through the pipeline
-    return `${require.resolve(base)}?-autoprefixer&importLoaders=${loaders.length + 1}${moduleSettings}` +
-        `!${require.resolve('postcss-loader')}${extraLoaders}`;
+    return `${require.resolve(base)}?` +
+        `${sourceMapSettings}` +
+        '-autoprefixer&' +
+        `importLoaders=${loaders.length + 1}` +
+        `${moduleSettings}` +
+        `!${require.resolve('postcss-loader')}` +
+        `${extraLoaders}`;
 }

@@ -20,6 +20,10 @@ export default {
                     description: 'If CSS Modules should be enabled.',
                     validator: required(isBoolean),
                 },
+                sourceMap: {
+                    description: 'If CSS source maps should be enabled.',
+                    validator: isBoolean,
+                },
             },
         },
     },
