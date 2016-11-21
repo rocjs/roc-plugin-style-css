@@ -16,6 +16,7 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
     const DIST = settings.build.mode === 'dist';
     const WEB = target === 'web';
     const NODE = target === 'node';
+    const sourceMap = settings.build.style.sourceMap;
 
     const getGlobalStylePaths = (toMatch) => {
         if (WEB && settings.build.resources) {
@@ -47,7 +48,7 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
     const loader = NODE ?
         'css-loader/locals' :
         'css-loader';
-    const styleLoader = (cssModules) => cssPipeline(loader, currentLoaders, DIST, cssModules);
+    const styleLoader = (cssModules) => cssPipeline(loader, currentLoaders, DIST, sourceMap, cssModules);
 
     // Add CSS Modules loader
     newWebpackConfig.module.loaders.push({
