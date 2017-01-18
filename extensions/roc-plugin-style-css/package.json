@@ -26,7 +26,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "autoprefixer": "~6.1.2",
+    "autoprefixer": "~6.6.1",
     "css-loader": "~0.23.0",
     "extract-text-webpack-plugin": "~0.8.2",
     "node-noop": "1.0.0",
