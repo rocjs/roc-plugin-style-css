@@ -33,103 +33,105 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
     };
 
     // Get extensions and loaders
-    let currentExtensions = ['css'];
-    let currentLoaders = [];
+    const styles = [{ extensions: ['css'], loaders: [] }];
     invokeHook('add-style')(({ extensions, loaders }) => {
-        currentExtensions = currentExtensions.concat(extensions);
-        currentLoaders = currentLoaders.concat(loaders);
+        styles.push({ extensions: [].concat(extensions), loaders: [].concat(loaders) });
     });
 
-    // We allow stylesheet files to end with a query string
-    const toMatch = new RegExp(currentExtensions.map((extension) => `\\.${extension}(\\?.*)?$`).join('|'));
-    const globalStylePaths = getGlobalStylePaths(toMatch);
+    // Create a seperate pipeline for each `add-style` invocation
+    styles.forEach(({ extensions, loaders }) => {
+        // We allow stylesheet files to end with a query string
+        const toMatch = new RegExp(extensions.map((extension) => `\\.${extension}(\\?.*)?$`).join('|'));
+        const globalStylePaths = getGlobalStylePaths(toMatch);
 
-    // Create general style loader
-    const loader = NODE ?
-        'css-loader/locals' :
-        'css-loader';
-    const styleLoader = (cssModules) => cssPipeline(loader, currentLoaders, DIST, sourceMap, cssModules);
+        // Create general style loader
+        const loader = NODE ?
+            'css-loader/locals' :
+            'css-loader';
+        const styleLoader = (cssModules) => cssPipeline(loader, loaders, DIST, sourceMap, cssModules);
 
-    // Add CSS Modules loader
-    newWebpackConfig.module.loaders.push({
-        test: (absPath) => {
-            if (
-                globalStylePaths.indexOf(absPath) === -1 && toMatch.test(absPath) &&
-                (settings.build.style.modules || /\?modules$/.test(absPath) || /\?modules=true$/.test(absPath))
-            ) {
-                // We do not want to enable CSS modules if disabled
-                if (/\?modules=false$/.test(absPath)) {
-                    return false;
-                }
-
-                return true;
-            }
-
-            return false;
-        },
-        loader: WEB ?
-            ExtractTextPlugin.extract(require.resolve('style-loader'), styleLoader(true)) :
-            styleLoader(true),
-    });
-
-    // Create global style loader
-    if (WEB) {
+        // Add CSS Modules loader
         newWebpackConfig.module.loaders.push({
             test: (absPath) => {
                 if (
                     globalStylePaths.indexOf(absPath) === -1 && toMatch.test(absPath) &&
-                    (!settings.build.style.modules || /\?modules=false$/.test(absPath))
+                    (settings.build.style.modules || /\?modules$/.test(absPath) || /\?modules=true$/.test(absPath))
                 ) {
-                    // We do not want to process as global CSS if modules is enabled for the specific file
-                    if (/\?modules$/.test(absPath) || /\?modules=true$/.test(absPath)) {
+                    // We do not want to enable CSS modules if disabled
+                    if (/\?modules=false$/.test(absPath)) {
                         return false;
                     }
 
                     return true;
                 }
 
-                if (globalStylePaths.indexOf(absPath) !== -1) {
-                    return true;
-                }
-
                 return false;
             },
-            loader: ExtractTextPlugin.extract(require.resolve('style-loader'), styleLoader(false)),
-        });
-    } else {
-        newWebpackConfig.externals.unshift((context, request, callback) => {
-            // Mark all requests to stylesheets as internal so we can replace them using NormalModuleReplacementPlugin
-            if (toMatch.test(request)) {
-                return callback(null, false);
-            }
-            return callback();
+            loader: WEB ?
+                ExtractTextPlugin.extract(require.resolve('style-loader'), styleLoader(true)) :
+                styleLoader(true),
         });
 
-        if (settings.build.style.modules) {
-            const makeNoop = new RegExp(currentExtensions
-                .map((extension) => `\\.${extension}\\?modules=false$`).join('|')
-            );
-            newWebpackConfig.plugins.push(
-                new webpack.NormalModuleReplacementPlugin(makeNoop, require.resolve('node-noop'))
-            );
+        // Create global style loader
+        if (WEB) {
+            newWebpackConfig.module.loaders.push({
+                test: (absPath) => {
+                    if (
+                        globalStylePaths.indexOf(absPath) === -1 && toMatch.test(absPath) &&
+                        (!settings.build.style.modules || /\?modules=false$/.test(absPath))
+                    ) {
+                        // We do not want to process as global CSS if modules is enabled for the specific file
+                        if (/\?modules$/.test(absPath) || /\?modules=true$/.test(absPath)) {
+                            return false;
+                        }
+
+                        return true;
+                    }
+
+                    if (globalStylePaths.indexOf(absPath) !== -1) {
+                        return true;
+                    }
+
+                    return false;
+                },
+                loader: ExtractTextPlugin.extract(require.resolve('style-loader'), styleLoader(false)),
+            });
         } else {
-            // The difference here from above is that we will take files without a query string and
-            // ones that have disabled explicitly
-            // This means that we are not fully correct, should be fixed in the future
-            const makeNoop = new RegExp(currentExtensions
-                .map((extension) => `\\.${extension}(|\\?modules=false)$`).join('|')
-            );
-            newWebpackConfig.plugins.push(
-                new webpack.NormalModuleReplacementPlugin(makeNoop, require.resolve('node-noop'))
-            );
-        }
-    }
+            newWebpackConfig.externals.unshift((context, request, callback) => {
+                // Mark all requests to stylesheets as internal so we can replace them
+                // using NormalModuleReplacementPlugin
+                if (toMatch.test(request)) {
+                    return callback(null, false);
+                }
+                return callback();
+            });
 
-    // Update resolve extensions
-    newWebpackConfig.resolve = {
-        ...newWebpackConfig.resolve,
-        extensions: newWebpackConfig.resolve.extensions.concat(currentExtensions.map((extension) => `.${extension}`)),
-    };
+            if (settings.build.style.modules) {
+                const makeNoop = new RegExp(extensions
+                    .map((extension) => `\\.${extension}\\?modules=false$`).join('|')
+                );
+                newWebpackConfig.plugins.push(
+                    new webpack.NormalModuleReplacementPlugin(makeNoop, require.resolve('node-noop'))
+                );
+            } else {
+                // The difference here from above is that we will take files without a query string and
+                // ones that have disabled explicitly
+                // This means that we are not fully correct, should be fixed in the future
+                const makeNoop = new RegExp(extensions
+                    .map((extension) => `\\.${extension}(|\\?modules=false)$`).join('|')
+                );
+                newWebpackConfig.plugins.push(
+                    new webpack.NormalModuleReplacementPlugin(makeNoop, require.resolve('node-noop'))
+                );
+            }
+        }
+
+        // Update resolve extensions
+        newWebpackConfig.resolve = {
+            ...newWebpackConfig.resolve,
+            extensions: newWebpackConfig.resolve.extensions.concat(extensions.map((extension) => `.${extension}`)),
+        };
+    });
 
     // Configure autoprefixer
     newWebpackConfig.postcss = [
