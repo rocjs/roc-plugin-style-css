@@ -1,4 +1,4 @@
-import { isArray, isObject, isString, oneOf, isRegex } from 'roc/validators';
+import { isArray, isObject, isString, oneOf } from 'roc/validators';
 import { lazyFunctionRequire } from 'roc';
 
 import config from '../config/roc.config.js';
