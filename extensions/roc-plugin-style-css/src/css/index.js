@@ -35,11 +35,13 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
     // Get extensions and loaders
     const styles = [{ extensions: ['css'], loaders: [], preLoaders: [] }];
     invokeHook('add-style')(({ extensions, loaders }) => {
-        styles.push({ extensions: [].concat(extensions), loaders: [].concat(loaders) });
+        styles.push({ extensions: [].concat(extensions), loaders: [].concat(loaders), preLoaders: [] });
     });
 
-    invokeHook('css-preloaders')((loaders) => {
-      styles[0].preLoaders = [...loaders];
+    invokeHook('add-style-preloaders')((loaders) => {
+        styles.forEach(({ preLoaders }, i) => {
+            styles[i].preLoaders = preLoaders.concat(loaders);
+        });
     });
 
     // Create a seperate pipeline for each `add-style` invocation

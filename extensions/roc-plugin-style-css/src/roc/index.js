@@ -25,7 +25,7 @@ export default {
             hasCallback: true,
             returns: isObject(oneOf(isString, isArray(isString))),
         },
-        'css-preloaders': {
+        'add-style-preloaders': {
             description: `
             Used to preloaders to style.
 
@@ -33,7 +33,7 @@ export default {
 
             \`[loarder1, loader1, ...]\``,
             hasCallback: true,
-            //returns: isObject(oneOf(isObject, isArray, is)),
+            returns: isArray(isString),
         },
     },
 };

@@ -1,4 +1,9 @@
-export default function cssPipeline(base, loaders, isDist, sourceMap = false, cssModulesEnabled = true, ploaders = null) {
+export default function cssPipeline(base,
+                                    loaders,
+                                    isDist,
+                                    sourceMap = false,
+                                    cssModulesEnabled = true,
+                                    ploaders) {
     let moduleSettings = '';
     const sourceMapSettings = sourceMap ?
         'sourceMap&' :
