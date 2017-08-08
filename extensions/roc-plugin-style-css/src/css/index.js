@@ -33,13 +33,17 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
     };
 
     // Get extensions and loaders
-    const styles = [{ extensions: ['css'], loaders: [] }];
+    const styles = [{ extensions: ['css'], loaders: [], preLoaders: [] }];
     invokeHook('add-style')(({ extensions, loaders }) => {
         styles.push({ extensions: [].concat(extensions), loaders: [].concat(loaders) });
     });
 
+    invokeHook('css-preloaders')((loaders) => {
+      styles[0].preLoaders = [...loaders];
+    });
+
     // Create a seperate pipeline for each `add-style` invocation
-    styles.forEach(({ extensions, loaders }) => {
+    styles.forEach(({ extensions, loaders, preLoaders }) => {
         // We allow stylesheet files to end with a query string
         const toMatch = new RegExp(extensions.map((extension) => `\\.${extension}(\\?.*)?$`).join('|'));
         const globalStylePaths = getGlobalStylePaths(toMatch);
@@ -48,7 +52,7 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
         const loader = NODE ?
             'css-loader/locals' :
             'css-loader';
-        const styleLoader = (cssModules) => cssPipeline(loader, loaders, DIST, sourceMap, cssModules);
+        const styleLoader = (cssModules) => cssPipeline(loader, loaders, DIST, sourceMap, cssModules, preLoaders);
 
         // Add CSS Modules loader
         newWebpackConfig.module.loaders.push({

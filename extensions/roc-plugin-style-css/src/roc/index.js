@@ -1,4 +1,4 @@
-import { isArray, isObject, isString, oneOf } from 'roc/validators';
+import { isArray, isObject, isString, oneOf, isRegex } from 'roc/validators';
 import { lazyFunctionRequire } from 'roc';
 
 import config from '../config/roc.config.js';
@@ -24,6 +24,16 @@ export default {
             \`{ extensions: String/[String], loaders: String/[String] }\``,
             hasCallback: true,
             returns: isObject(oneOf(isString, isArray(isString))),
+        },
+        'css-preloaders': {
+            description: `
+            Used to preloaders to style.
+
+            Important that the _actions_ return a list of loaders:
+
+            \`[loarder1, loader1, ...]\``,
+            hasCallback: true,
+            //returns: isObject(oneOf(isObject, isArray, is)),
         },
     },
 };
