@@ -28,7 +28,7 @@ export default function cssPipeline(base,
         `!${preLoaders.join('!')}` :
         '';
 
-    const nLoaders = loaders.length + preLoaders.length + 1
+    const nLoaders = loaders.length + preLoaders.length + 1;
 
     // We set importLoaders to nr. loaders + 1 to get css-loader to process everything through the pipeline
     return `${require.resolve(base)}?` +
