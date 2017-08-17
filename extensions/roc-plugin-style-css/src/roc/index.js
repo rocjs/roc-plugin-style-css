@@ -27,11 +27,9 @@ export default {
         },
         'add-style-preloaders': {
             description: `
-            Used to preloaders to style.
+            Used to add general loaders early in the chain, before the PostCSS loader.
 
-            Important that the _actions_ return a list of loaders:
-
-            \`[loarder1, loader1, ...]\``,
+            These loaders will be applied to all styles added from the \`add-style\` hook.`,
             hasCallback: true,
             returns: isArray(isString),
         },

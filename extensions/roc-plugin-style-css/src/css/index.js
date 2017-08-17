@@ -33,19 +33,18 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
     };
 
     // Get extensions and loaders
-    const styles = [{ extensions: ['css'], loaders: [], preLoaders: [] }];
+    const styles = [{ extensions: ['css'], loaders: [] }];
     invokeHook('add-style')(({ extensions, loaders }) => {
         styles.push({ extensions: [].concat(extensions), loaders: [].concat(loaders), preLoaders: [] });
     });
 
+    let preLoaders = [];
     invokeHook('add-style-preloaders')((loaders) => {
-        styles.forEach(({ preLoaders }, i) => {
-            styles[i].preLoaders = preLoaders.concat(loaders);
-        });
+        preLoaders = preLoaders.concat(loaders);
     });
 
     // Create a seperate pipeline for each `add-style` invocation
-    styles.forEach(({ extensions, loaders, preLoaders }) => {
+    styles.forEach(({ extensions, loaders }) => {
         // We allow stylesheet files to end with a query string
         const toMatch = new RegExp(extensions.map((extension) => `\\.${extension}(\\?.*)?$`).join('|'));
         const globalStylePaths = getGlobalStylePaths(toMatch);

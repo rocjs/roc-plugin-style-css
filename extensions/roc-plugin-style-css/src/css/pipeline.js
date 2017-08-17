@@ -3,7 +3,7 @@ export default function cssPipeline(base,
                                     isDist,
                                     sourceMap = false,
                                     cssModulesEnabled = true,
-                                    ploaders) {
+                                    preLoaders) {
     let moduleSettings = '';
     const sourceMapSettings = sourceMap ?
         'sourceMap&' :
@@ -24,17 +24,19 @@ export default function cssPipeline(base,
         `!${loaders.join('!')}` :
         '';
 
-    const preLoaders = (ploaders && ploaders.length > 0) ?
-        `!${ploaders.join('!')}` :
+    const ploaders = (preLoaders && preLoaders.length > 0) ?
+        `!${preLoaders.join('!')}` :
         '';
+
+    const nLoaders = loaders.length + preLoaders.length + 1
 
     // We set importLoaders to nr. loaders + 1 to get css-loader to process everything through the pipeline
     return `${require.resolve(base)}?` +
         `${sourceMapSettings}` +
         '-autoprefixer&' +
-        `importLoaders=${loaders.length + 1}` +
+        `importLoaders=${nLoaders}` +
         `${moduleSettings}` +
-        `${preLoaders}` +
+        `${ploaders}` +
         `!${require.resolve('postcss-loader')}` +
         `${extraLoaders}`;
 }
