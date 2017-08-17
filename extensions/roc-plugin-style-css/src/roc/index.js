@@ -25,5 +25,13 @@ export default {
             hasCallback: true,
             returns: isObject(oneOf(isString, isArray(isString))),
         },
+        'add-style-preloaders': {
+            description: `
+            Used to add general loaders early in the chain, before the PostCSS loader.
+
+            These loaders will be applied to all styles added from the \`add-style\` hook.`,
+            hasCallback: true,
+            returns: isArray(isString),
+        },
     },
 };

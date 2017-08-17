@@ -38,6 +38,11 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
         styles.push({ extensions: [].concat(extensions), loaders: [].concat(loaders) });
     });
 
+    let preLoaders = [];
+    invokeHook('add-style-preloaders')((loaders) => {
+        preLoaders = preLoaders.concat(loaders);
+    });
+
     // Create a seperate pipeline for each `add-style` invocation
     styles.forEach(({ extensions, loaders }) => {
         // We allow stylesheet files to end with a query string
@@ -48,7 +53,7 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
         const loader = NODE ?
             'css-loader/locals' :
             'css-loader';
-        const styleLoader = (cssModules) => cssPipeline(loader, loaders, DIST, sourceMap, cssModules);
+        const styleLoader = (cssModules) => cssPipeline(loader, loaders, DIST, sourceMap, cssModules, preLoaders);
 
         // Add CSS Modules loader
         newWebpackConfig.module.loaders.push({
