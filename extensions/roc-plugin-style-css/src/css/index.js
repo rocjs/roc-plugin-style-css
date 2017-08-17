@@ -35,7 +35,7 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
     // Get extensions and loaders
     const styles = [{ extensions: ['css'], loaders: [] }];
     invokeHook('add-style')(({ extensions, loaders }) => {
-        styles.push({ extensions: [].concat(extensions), loaders: [].concat(loaders), preLoaders: [] });
+        styles.push({ extensions: [].concat(extensions), loaders: [].concat(loaders) });
     });
 
     let preLoaders = [];
