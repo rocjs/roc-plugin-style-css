@@ -53,7 +53,8 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
         const loader = NODE ?
             'css-loader/locals' :
             'css-loader';
-        const styleLoader = (cssModules) => cssPipeline(loader, loaders, DIST, sourceMap, cssModules, preLoaders);
+        const styleLoader = (cssModules) => cssPipeline(loader, loaders, DIST, sourceMap, cssModules,
+                                                        preLoaders, settings.build.style.minimize);
 
         // Add CSS Modules loader
         newWebpackConfig.module.loaders.push({
