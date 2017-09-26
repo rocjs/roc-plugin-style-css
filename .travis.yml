@@ -3,7 +3,7 @@ cache:
   directories:
     - node_modules
 node_js:
-  - 4.2
+  - 4.8.4
 before_install:
   - npm install -g npm
 before_script:
