@@ -25,7 +25,7 @@ export default {
                     validator: isBoolean,
                 },
                 minimize: {
-                    description: 'Activate or Desactivate css minimization',
+                    description: 'If minification should be enabled',
                     validator: isBoolean,
                 },
             },
