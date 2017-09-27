@@ -24,6 +24,10 @@ export default {
                     description: 'If CSS source maps should be enabled.',
                     validator: isBoolean,
                 },
+                minimize: {
+                    description: 'If minification should be enabled.',
+                    validator: isBoolean,
+                },
             },
         },
     },

@@ -9,6 +9,7 @@ export default {
                     __raw: {},
                     browsers: 'last 2 version',
                 },
+                minimize: true,
             },
         },
     },

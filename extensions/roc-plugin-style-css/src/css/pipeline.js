@@ -1,8 +1,19 @@
-export default function cssPipeline(base, loaders, isDist, sourceMap = false, cssModulesEnabled = true, preLoaders) {
+export default function cssPipeline(
+    base,
+    loaders,
+    isDist,
+    sourceMap = false,
+    cssModulesEnabled = true,
+    preLoaders,
+    minimize = true
+) {
     let moduleSettings = '';
     const sourceMapSettings = sourceMap ?
         'sourceMap&' :
         '';
+    const minimizeSettings = minimize ?
+        '' :
+        '-minimize&';
 
     if (cssModulesEnabled) {
         moduleSettings = '&modules&localIdentName=';
@@ -27,6 +38,7 @@ export default function cssPipeline(base, loaders, isDist, sourceMap = false, cs
 
     // We set importLoaders to nr. loaders + 1 to get css-loader to process everything through the pipeline
     return `${require.resolve(base)}?` +
+        `${minimizeSettings}` +
         `${sourceMapSettings}` +
         '-autoprefixer&' +
         `importLoaders=${nLoaders}` +
