@@ -7,6 +7,7 @@
 
 | Name      | Description                                          | Path                              | CLI option                          | Default               | Type                     | Required | Can be empty | Extensions           |
 | --------- | ---------------------------------------------------- | --------------------------------- | ----------------------------------- | --------------------- | ------------------------ | -------- | ------------ | -------------------- |
+| minimize  | If minification should be enabled.                   | build.style.minimize              | --build-style-minimize              | `true`                | `Boolean`                | No       |              | roc-plugin-style-css |
 | modules   | If CSS Modules should be enabled.                    | build.style.modules               | --build-style-modules               | `true`                | `Boolean`                | Yes      |              | roc-plugin-style-css |
 | name      | The naming pattern to use for the built style files. | build.style.name                  | --build-style-name                  | `"[name].[hash].css"` | `String`                 | Yes      | No           | roc-plugin-style-css |
 | sourceMap | If CSS source maps should be enabled.                | build.style.sourceMap             | --build-style-sourceMap             | `false`               | `Boolean`                | No       |              | roc-plugin-style-css |
