@@ -15,7 +15,7 @@ export default ({ context: { config: { settings } }, previousValue: webpackConfi
     const DEV = settings.build.mode === 'dev';
     const DIST = settings.build.mode === 'dist';
     const WEB = target === 'web';
-    const NODE = target === 'node';
+    const NODE = webpackConfig.target === 'node';
     const sourceMap = settings.build.style.sourceMap;
     const minimize = settings.build.style.minimize;
 
